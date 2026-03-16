@@ -47,12 +47,19 @@ def _display_name(message: Message) -> str:
 
 
 async def _send_file_if_exists(message: Message, file_path: Path, caption: str | None = None) -> None:
+    logger.info(f"Attempting to send file: {file_path}")
+    logger.info(f"File exists: {file_path.exists()}, is_file: {file_path.is_file() if file_path.exists() else 'N/A'}")
+    if file_path.exists():
+        logger.info(f"File size: {file_path.stat().st_size} bytes")
+    
     if file_path.exists() and file_path.is_file() and file_path.stat().st_size > 0:
         if file_path.suffix.lower() in {'.jpg', '.jpeg', '.png', '.webp'}:
             await message.answer_photo(photo=FSInputFile(file_path), caption=caption)
         else:
             await message.answer_document(document=FSInputFile(file_path), caption=caption)
+        logger.info(f"File sent successfully: {file_path}")
     elif caption:
+        logger.warning(f"File not found or empty, sending caption only: {file_path}")
         await message.answer(caption)
 
 
