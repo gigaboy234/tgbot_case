@@ -31,6 +31,10 @@ ADMIN_CHAT_ID = _env_int('ADMIN_CHAT_ID')
 DIRECTOR_IMAGE_PATH = IMAGES_DIR / 'director.jpg'
 ABOUT_COMPANY_PDF_PATH = PDF_DIR / 'about_company.pdf'
 
+# URL для файлов (если указаны, используются вместо локальных файлов)
+DIRECTOR_IMAGE_URL = os.getenv('DIRECTOR_IMAGE_URL', '')
+ABOUT_COMPANY_PDF_URL = os.getenv('ABOUT_COMPANY_PDF_URL', '')
+
 COMMUNITY_LINKS = [
     CommunityLink(text='Сообщество 1', url=os.getenv('COMMUNITY_URL_1', 'https://t.me/example_community_1')),
     CommunityLink(text='Сообщество 2', url=os.getenv('COMMUNITY_URL_2', 'https://t.me/example_community_2')),
