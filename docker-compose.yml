@@ -3,12 +3,8 @@ services:
     build: .
     container_name: tgbot
     restart: unless-stopped
-    environment:
-      - BOT_TOKEN=${BOT_TOKEN}
-      - ADMIN_CHAT_ID=${ADMIN_CHAT_ID}
-      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    env_file:
+      - .env
     volumes:
       - ./data:/app/data
       - ./bot.sqlite3:/app/bot.sqlite3
-    env_file:
-      - .env
