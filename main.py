@@ -9,7 +9,9 @@ load_dotenv()
 
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
+from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram.enums import ParseMode
+from aiohttp import ClientTimeout
 
 from config import BOT_TOKEN, DB_PATH, LOG_LEVEL
 from db import Database
@@ -32,7 +34,8 @@ async def main() -> None:
     db = Database(DB_PATH)
     db.init()
 
-    bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+    session = AiohttpSession(timeout=ClientTimeout(total=300))  # 5 минут таймаут для больших файлов
+    bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML), session=session)
     dp = Dispatcher()
 
     onboarding.set_db(db)
