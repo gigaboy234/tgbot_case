@@ -53,11 +53,16 @@ async def _send_file_if_exists(message: Message, file_path: Path, caption: str |
         logger.info(f"File size: {file_path.stat().st_size} bytes")
     
     if file_path.exists() and file_path.is_file() and file_path.stat().st_size > 0:
-        if file_path.suffix.lower() in {'.jpg', '.jpeg', '.png', '.webp'}:
-            await message.answer_photo(photo=FSInputFile(file_path), caption=caption)
-        else:
-            await message.answer_document(document=FSInputFile(file_path), caption=caption)
-        logger.info(f"File sent successfully: {file_path}")
+        try:
+            if file_path.suffix.lower() in {'.jpg', '.jpeg', '.png', '.webp'}:
+                await message.answer_photo(photo=FSInputFile(file_path), caption=caption)
+            else:
+                await message.answer_document(document=FSInputFile(file_path), caption=caption)
+            logger.info(f"File sent successfully: {file_path}")
+        except Exception as e:
+            logger.error(f"Failed to send file {file_path}: {e}")
+            if caption:
+                await message.answer(caption)
     elif caption:
         logger.warning(f"File not found or empty, sending caption only: {file_path}")
         await message.answer(caption)
